@@ -10,14 +10,13 @@ function updateLoadingInfo(){
 	if(!loadingDiv[0]) loadingDiv = $('<div>').attr('id', 'loading_div').prependTo('body');
 	
 	if(WebDJ.Main.deck1.lastFileLoaded && WebDJ.Main.deck2.lastFileLoaded){
-		loadingDiv.html('Everything is loaded!<br/>To get started, press the "Play In Sync" button to start a mashup auto-magically!</br>Turn the knobs up and down to see what cool combinations you can make with the two tracks. You can also sometimes make cool mashups with the start and stop buttons. Shift+click on the stop button brings the deck all the way back to bar 1.<br/>Hint: To turn a knob up or down, click it and drag straight upwards or downwards.<br/>You can drag and drop these tracks onto either deck to load them.');
+	//	loadingDiv.html('Everything is loaded!<br/>To get started, press the "Play In Sync" button to start a mashup auto-magically!</br>Turn the knobs up and down to see what cool combinations you can make with the two tracks. You can also sometimes make cool mashups with the start and stop buttons. Shift+click on the stop button brings the deck all the way back to bar 1.<br/>Hint: To turn a knob up or down, click it and drag straight upwards or downwards.<br/>You can drag and drop these tracks onto either deck to load them.');
 	}else{
-		loadingDiv.text('Sit tight. I\'m loading some mp3s for you to play with.');
+	//	loadingDiv.text('Sit tight. I\'m loading some mp3s for you to play with.');
 	}
 	
 	
 };
-
 
 window.WebDJ.Main = (function(){
 	var self = {};
@@ -28,13 +27,15 @@ window.WebDJ.Main = (function(){
 		self.deck1 = window.audioUtilities.VirtualCDJ(context);
 		self.deck2 = window.audioUtilities.VirtualCDJ(context);
 		
+		self.deck1.syncSource = self.deck2;
+		self.deck2.syncSource = self.deck1;
+		
 		
 		self.mixer = window.audioUtilities.VirtualDJM(context, context.destination);
 		self.mixer.addChannel(self.deck1);
 		self.mixer.addChannel(self.deck2);
 		
-		//E - Community Funk - Deadmau5 Remix - Burufunk, Carbon Community.mp3
-		self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Animal Rights Original Mix - Deadmau5  Wolfgang Gartner.mp3', false);
+		self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Last Time (Knife Party Remix) - Labrinth.mp3', false);
 
 		//self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Duck Sauce - Barbra Streisand (Darth & Vader Remix).mp3', false);
 		self.deck2.loadTrackByURL(WebDJ.rootFilePath+'E - Less Go! (Porter Robinson Remix) - Spencer & Hill feat. Lil Jon.mp3', false);
@@ -78,7 +79,6 @@ window.WebDJ.Main = (function(){
 		window.WebDJ.GUI.controlTemplates.button({
 			label: 'Nudge ^B^ to beatmatch <<A',
 			onClick: function(newVal, e){
-				console.log(e);
 				self.syncDeckBeats(self.deck1, self.deck2, e.shiftKey);
 			}
 		}).appendTo(GlobalUIParent);
@@ -86,15 +86,37 @@ window.WebDJ.Main = (function(){
 		WebDJ.SongBrowser.renderList();
 		
 		self.deck2.on('barBeatJump', function(e){
-			if(self.deck2.isPlaying && self.deck1.isPlaying)
-				self.syncDeckBeats(self.deck1, self.deck2);
+			if(self.deck2.isPlaying && self.deck1.isPlaying){
+				//self.startQuantized(self.deck1, self.deck2);				
+				self.syncDeckBeats(self.deck1, self.deck2, true);
+			}
 		});
 		
 		self.deck1.on('barBeatJump', function(e){
-			if(self.deck2.isPlaying && self.deck1.isPlaying)
-				self.syncDeckBeats(self.deck2, self.deck1);
+			if(self.deck2.isPlaying && self.deck1.isPlaying){
+				//self.startQuantized(self.deck2, self.deck1);
+				self.syncDeckBeats(self.deck2, self.deck1, true);
+			}
 		});
+		
+		WebDJ.GUI.Decks[1].renderedControls.playbackRate.on('mouseup', function(e){ if(!e.shiftKey) self.syncDeckBPM(self.deck1, self.deck2); });
+		WebDJ.GUI.Decks[0].renderedControls.playbackRate.on('mouseup', function(e){ if(!e.shiftKey) self.syncDeckBPM(self.deck2, self.deck1); });
+	
+		
+
 	};
+	
+	self.startQuantized = function(from, to){
+		var msToNextMeasure = from.getMsToNextMeasure();
+		
+		console.log(msToNextMeasure);
+		to.schedulePlayback(msToNextMeasure);
+	};
+	
+	self.syncDeckBPM = function(from, to) {
+		to.setSpeed(from.getComputedBPM() / to.trackBPM);
+		to.trigger('bpmSync');
+	}
 	
 	self.syncDeckBeats = function(from, to, alsoMatchMeasure){
 		to.setSpeed(from.getComputedBPM() / to.trackBPM);
@@ -104,7 +126,7 @@ window.WebDJ.Main = (function(){
 			measureAdjust = to.barsBeatsToSeconds(0, (from.barBeatPosition.beats-to.barBeatPosition.beats) + addlBeats )
 			
 			console.log('matching measures!', 0, from.barBeatPosition.beats-to.barBeatPosition.beats);
-			//to.jumpToBarBeatPosition(to.barBeatPosition.bars, from.barBeatPosition.beats-1);
+			//to.jumpToBarBeatPosition(to.barBeatPosition.bars, from.barBeatPosition.beats-1, true);
 		}
 		
 		// then we do beats.
