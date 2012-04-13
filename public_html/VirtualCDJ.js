@@ -6,6 +6,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 		gainNode	: context.createGainNode(),
 		loadedTrack	: false,
 		buffers		: {},
+		syncSource	: false,
 		nowPlaying	: '',
 		lastFileLoaded: '',
 		playheadPosition: 0,
@@ -66,7 +67,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 				context.decodeAudioData(request.response, function(buffer){
 					WebDJ.cache[url] = buffer;
 					afterDecode(url);
-				}, function(e){alert("An unknown error occurred when trying to decode the track:\n"+url, e);});
+				}, function(e){console.log(e); alert("An unknown error occurred when trying to decode the track:\n"+url, e);});
 				
 			}, false);
 		
@@ -128,9 +129,9 @@ window.audioUtilities.VirtualCDJ = function(context){
 		return self.nowPlaying || self.lastFileLoaded;
 	};
 	
-	self.play = function(url){
-		console.log(url, self.nowPlaying, self.lastFileLoaded);
+	self.play = function(url, scheduleTime){
 		url = url || self.nowPlaying || self.lastFileLoaded;
+		if(!scheduleTime) scheduleTime = self.source.context.currentTime;
 
 		console.log('setting buffer as source: '+url, self.buffers[url]);
 		self.source = self.buffers[url];
@@ -138,14 +139,13 @@ window.audioUtilities.VirtualCDJ = function(context){
 		
 		self.source.connect(self.gainNode);
 		self.source.playbackRate.value = self.playbackRate || 1;
-		self.findAndLoadSongInfo(url);
 		self.playheadStartedAt = self.playheadPosition;
 		
-		var startPlayingFromHere = self.playheadPosition+self.trackStartOffset; // in seconds.
+		var startPlayingFromHere = self.playheadPosition+self.trackStartOffset - .003; // 3ms latency compensation
 		var howLongToPlay = self.source.buffer.duration-startPlayingFromHere;
 		
-		console.log('starting play from point: ',startPlayingFromHere, 'until',howLongToPlay, 'duration:', (howLongToPlay - startPlayingFromHere), 'clip duration', self.source.buffer.duration);
-		self.source.noteGrainOn(0, startPlayingFromHere, howLongToPlay);//( - self.playheadPosition)-0.057
+		console.log('starting play in '+Math.floor( (scheduleTime - self.source.context.currentTime) * 1000)+'ms from point: ',startPlayingFromHere, 'until',howLongToPlay, 'duration:', (howLongToPlay - startPlayingFromHere), 'clip duration', self.source.buffer.duration);
+		self.source.noteGrainOn(scheduleTime, startPlayingFromHere, howLongToPlay);//( - self.playheadPosition)-0.057
 		self.beatsMeasureCalculator.updateOnInterval();
 		
 		self.flasher.data('startFlashing')(self.trackBPM * self.source.playbackRate.value, self.updatePlayheadPosition);
@@ -156,6 +156,27 @@ window.audioUtilities.VirtualCDJ = function(context){
 		
 		self.trigger('playStart', self.playheadPosition, self.source.buffer.duration-self.trackStartOffset);
 	};
+	
+	self.schedulePlayback = function(millisecondsFromNow){
+		if(self.isPlaying)
+			self.stop();
+		
+		self.play(undefined, self.source.context.currentTime + (millisecondsFromNow / 1000) );
+	};
+	
+	self.scheduleAtBarBeat = function(bars, beats, msFromNow){
+		if(!msFromNow && self.syncSource && self.syncSource.isPlaying)
+			msFromNow = self.syncSource.getMsToNextBeat();
+		
+		if(self.isPlaying) self.stop();
+		
+		self.playheadPosition = self.barsBeatsToSeconds(bars, beats);
+		self.play();
+		window.setTimeout(self.play, msFromNow - 100);
+		
+	};
+	
+	
 	
 	self.stop = function(resetPlayhead){
 		self.isPlaying = false;
@@ -249,7 +270,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 		self.trackBPM			= songInfo.bpm;
 		self.trackCuePoints		= songInfo.cuePoints || [];
 		
-		self.GUI.class.renderedControls.startOffset.data('input-element').attr({value: self.trackStartOffset * 1000}).trigger('change.noPropagation');
+		//self.GUI.class.renderedControls.startOffset.data('input-element').attr({value: self.trackStartOffset * 1000}).trigger('change.noPropagation');
 		self.trigger('songInfoLoaded', songInfo);
 	};
 	
@@ -264,12 +285,20 @@ window.audioUtilities.VirtualCDJ = function(context){
 	self.getMsToNextBeat = function(){
 		var msecPerBeat			= 60000 / self.trackBPM;
 		return self.updatePlayheadPosition() % msecPerBeat;
-	}
+	};
 	
 	self.getMsSinceLastBeat = function(){
 		var msecPerBeat			= 60000 / self.trackBPM;
 		return self.playheadPosition*1000 % msecPerBeat;
-	}
+	};
+	
+	self.getMsToNextMeasure = function(){
+		var msecPerBeat	= 60000 / self.trackBPM;
+				
+		var msecForBeats = ( self.trackTimeSignature[0] - self.barBeatPosition.beats ) * msecPerBeat;
+
+		return (self.updatePlayheadPosition() % msecPerBeat) + msecForBeats;
+	};
 	
 	
 	function reloadCurrentTrack(){

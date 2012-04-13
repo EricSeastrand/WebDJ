@@ -3,6 +3,104 @@ window.WebDJ.SongInfo = (function(){
 	
 	self.knownFiles = [
 		{
+			fileName: 'E - Last Time (Knife Party Remix) - Labrinth.mp3',
+			bpm		: 128,
+			offset	: 0.035,
+			cuePoints: [
+				{
+					title: '32 intro',
+					location: {
+						bars: 0,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 1',
+					location: {
+						bars: 25,
+						beats: 0
+					}
+				},{
+					title: 'drop 1',
+					location: {
+						bars: 49,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 2',
+					location: {
+						bars: 81,
+						beats: 0
+					}
+				},{
+					title: 'drop 2',
+					location: {
+						bars: 113,
+						beats: 0
+					}
+				},{
+					title: '16 outro',
+					location: {
+						bars: 145,
+						beats: 0
+					}
+				}
+			]
+		},{
+			fileName: 'E - Vandalism (Original mix) - Porter Robinson feat. Amba Shepherd.mp3',
+			bpm		: 127,
+			offset	: 0.034,
+			cuePoints: [
+				{
+					title: '32 intro',
+					location: {
+						bars: 0,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 1',
+					location: {
+						bars: 33,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 1.1',
+					location: {
+						bars: 57,
+						beats: 0
+					}
+				},{
+					title: 'drop 1',
+					location: {
+						bars: 97,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 2',
+					location: {
+						bars: 137,
+						beats: 0
+					}
+				},{
+					title: 'breakdown 2.1',
+					location: {
+						bars: 145,
+						beats: 0
+					}
+				},{
+					title: 'drop 2',
+					location: {
+						bars: 169,
+						beats: 0
+					}
+				},{
+					title: '32 outro',
+					location: {
+						bars: 201,
+						beats: 0
+					}
+				}
+			]
+		},{
 			fileName: 'E - Animal Rights Original Mix - Deadmau5  Wolfgang Gartner.mp3',
 			bpm		: 128,
 			offset	: 1.633,

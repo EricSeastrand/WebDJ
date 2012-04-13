@@ -153,6 +153,7 @@ window.WebDJ.GUI = (function(){
 		slider: function(options){
 			options = options || {};
 			if(!options.bindTo) options.bindTo = {};
+			var sliderIsBeingAdjusted = false;
 			
 			var sliderContainer = $('<div>')
 				.addClass('slider-control-container')
@@ -180,6 +181,10 @@ window.WebDJ.GUI = (function(){
 				.appendTo(sliderContainer)
 				.data({readoutContainer:  sliderValueReadout, options: options})
 				.bind('change.noPropagation', updateValueReadout)
+				.bind({
+					'mousedown' : function(){ sliderIsBeingAdjusted = true; },
+					'mouseup'	: function(){ sliderIsBeingAdjusted = false; } 
+				})
 				.trigger('change')
 			;
 			
@@ -197,9 +202,10 @@ window.WebDJ.GUI = (function(){
 				// binds to a specified @callback for @object('s) @event 
 				// then, updates bar percentage to @callback('s) return value
 					options.bindTo.object.on(options.bindTo.event, function(){
-						updateValueReadout.call(sliderInputElement);
+						if(sliderIsBeingAdjusted) return;
 						var newVal = options.bindTo.callback.apply(this, [self].concat(Array.prototype.slice.call(arguments)));
 						sliderInputElement.val(newVal);
+						updateValueReadout.call(sliderInputElement);
 					});
 			}
 			
@@ -389,6 +395,7 @@ window.WebDJ.GUI = (function(){
 			container.on('click', '.cuePoint', function(){
 				var location = $(this).data('cuePointInfo').location;
 				console.log(location.bars, location.beats);
+				//options.eventTriggerer.scheduleAtBarBeat(location.bars, location.beats);
 				options.eventTriggerer.jumpToBarBeatPosition(location.bars, location.beats);
 			});
 			
@@ -591,14 +598,14 @@ window.WebDJ.GUI = (function(){
 					maxValue: "1200",
 					onChange: function(newVal){
 						deckBackend.setSpeed(1 + (newVal / 10000));
-					},
-					bindTo: {
+					},bindTo: {
 						event: 'playStart',
 						object: deckBackend,
 						callback: function(control, elapsed, total){
 							return (this.source.playbackRate.value - 1) * 10000;
 						}
 					}
+					
 				}
 			},
 			startOffset: {
@@ -610,6 +617,13 @@ window.WebDJ.GUI = (function(){
 					value	: deckBackend.trackStartOffset,
 					onChange: function(newVal, e){
 						deckBackend.setOffsetRealTime(newVal/1000, e.shiftKey);
+					},
+					bindTo: {
+						event: 'songInfoLoaded',
+						object: deckBackend,
+						callback: function(control, elapsed, total){
+							return this.trackStartOffset * 1000;
+						}
 					}
 				}
 			},
