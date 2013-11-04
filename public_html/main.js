@@ -69,19 +69,6 @@ window.WebDJ.Main = (function(){
 
 
 		
-		window.WebDJ.GUI.controlTemplates.button({
-			label: 'Nudge ^A^ to beatmatch B>>',
-			onClick: function(newVal, e){
-				self.syncDeckBeats(self.deck2, self.deck1, e.shiftKey);
-			}
-		}).appendTo(GlobalUIParent);
-		
-		window.WebDJ.GUI.controlTemplates.button({
-			label: 'Nudge ^B^ to beatmatch <<A',
-			onClick: function(newVal, e){
-				self.syncDeckBeats(self.deck1, self.deck2, e.shiftKey);
-			}
-		}).appendTo(GlobalUIParent);
 		
 		WebDJ.SongBrowser.renderList();
 		
@@ -105,6 +92,23 @@ window.WebDJ.Main = (function(){
 		
 
 	};
+
+	/*
+	window.WebDJ.GUI.controlTemplates.button({
+			label: 'Nudge ^A^ to beatmatch B>>',
+			onClick: function(newVal, e){
+				self.syncDeckBeats(self.deck2, self.deck1, e.shiftKey);
+			}
+		}).appendTo(GlobalUIParent);
+		
+		window.WebDJ.GUI.controlTemplates.button({
+			label: 'Nudge ^B^ to beatmatch <<A',
+			onClick: function(newVal, e){
+				self.syncDeckBeats(self.deck1, self.deck2, e.shiftKey);
+			}
+		}).appendTo(GlobalUIParent);
+		
+	*/
 	
 	self.startQuantized = function(from, to){
 		var msToNextMeasure = from.getMsToNextMeasure();
@@ -117,7 +121,7 @@ window.WebDJ.Main = (function(){
 		to.setSpeed(from.getComputedBPM() / to.trackBPM);
 		to.trigger('bpmSync');
 	};
-	
+
 	self.startQuantized = function(from, to){
 		var msToNextMeasure = from.getMsToNextMeasure();
 		
