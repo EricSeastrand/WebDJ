@@ -116,7 +116,14 @@ window.WebDJ.Main = (function(){
 	self.syncDeckBPM = function(from, to) {
 		to.setSpeed(from.getComputedBPM() / to.trackBPM);
 		to.trigger('bpmSync');
-	}
+	};
+	
+	self.startQuantized = function(from, to){
+		var msToNextMeasure = from.getMsToNextMeasure();
+		
+		console.log(msToNextMeasure);
+		to.schedulePlayback(msToNextMeasure);
+	};
 	
 	self.syncDeckBeats = function(from, to, alsoMatchMeasure){
 		to.setSpeed(from.getComputedBPM() / to.trackBPM);
