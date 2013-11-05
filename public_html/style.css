@@ -47,35 +47,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedef4', end
 	
 }
 
-.button-control-container button {
-background: #6cdf29; /* Old browsers */
-background: -moz-linear-gradient(top, #6cdf29 0%, #76df3d 50%, #4fc311 50%, #48b907 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#6cdf29), color-stop(50%,#76df3d), color-stop(50%,#4fc311), color-stop(100%,#48b907)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #6cdf29 0%,#76df3d 50%,#4fc311 50%,#48b907 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #6cdf29 0%,#76df3d 50%,#4fc311 50%,#48b907 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #6cdf29 0%,#76df3d 50%,#4fc311 50%,#48b907 100%); /* IE10+ */
-background: linear-gradient(top, #6cdf29 0%,#76df3d 50%,#4fc311 50%,#48b907 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6cdf29', endColorstr='#48b907',GradientType=0 ); /* IE6-9 */
-border: 1px solid #8B8B8B;
-padding: 6px 8px;
-border-radius: 8px / 5px;
-color: #090F27;
-text-shadow: 1px 1px 0px white;
-cursor: pointer;
-
-}
-
-.button-control-container button:hover {
-background: #a9d490; /* Old browsers */
-background: -moz-linear-gradient(top, #a9d490 0%, #afd69a 50%, #91d36d 50%, #8ad85c 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a9d490), color-stop(50%,#afd69a), color-stop(50%,#91d36d), color-stop(100%,#8ad85c)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #a9d490 0%,#afd69a 50%,#91d36d 50%,#8ad85c 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #a9d490 0%,#afd69a 50%,#91d36d 50%,#8ad85c 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #a9d490 0%,#afd69a 50%,#91d36d 50%,#8ad85c 100%); /* IE10+ */
-background: linear-gradient(top, #a9d490 0%,#afd69a 50%,#91d36d 50%,#8ad85c 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a9d490', endColorstr='#8ad85c',GradientType=0 ); /* IE6-9 */
-}
-
 .cuePoint {
 	border: 1px solid white;
 	background: silver !important;

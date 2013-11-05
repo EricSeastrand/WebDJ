@@ -132,6 +132,7 @@ window.WebDJ.GUI = (function(){
 			var inputElement = $('<button>')
 				.append( label )
 				.appendTo( container )
+				
 			//	.css({'color': 'green', 'background': 'pink', padding: '6px 12px', border: '1px solid gray'} )
 				.data( {options: options} )
 				.trigger('change')
@@ -148,6 +149,8 @@ window.WebDJ.GUI = (function(){
 					options.onDblClick.call(this, true, e);
 				});
 			
+			if(options.classNames) inputElement.addClass(options.classNames);
+
 			return container;		
 		},
 		slider: function(options){
@@ -660,6 +663,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					label: 'Play >',
+					classNames: 'button-green',
 					onClick: function(newVal, e){
 						deckBackend.play(); // with no params, makes it play the last file it loaded.
 					}
@@ -668,6 +672,7 @@ window.WebDJ.GUI = (function(){
 			stop: {
 				type: 'button',
 				options: {
+					classNames: 'button-red',
 					labelHTML: 'Stop &#9619;',
 					onClick: function(newVal, e){
 						deckBackend.stop(e.shiftKey /*Makes shift+click return the playhead to the start*/);
@@ -680,6 +685,7 @@ window.WebDJ.GUI = (function(){
 			nudgeBackward: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: '<< Nudge',
 					tooltip: 'Click to jump backwards 25 milliseconds in the track. Double click to go back 100 ms.',
 					onClick: function(newVal, e){
@@ -693,6 +699,7 @@ window.WebDJ.GUI = (function(){
 			nudgeForward: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: 'Nudge >>',
 					tooltip: 'Click to jump forward 25 milliseconds in the track. Double click to go forward 100 ms.',
 					onClick: function(newVal, e){
@@ -706,6 +713,7 @@ window.WebDJ.GUI = (function(){
 			nudgeBackwardBeats: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: '<< 1 Beat',
 					tooltip: 'Click to jump 1 beat back.',
 					onClick: function(newVal, e){
@@ -719,6 +727,7 @@ window.WebDJ.GUI = (function(){
 			nudgeForwardBeats: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: '1 Beat >>',
 					tooltip: 'Click to jump 1 beat forward.',
 					onClick: function(newVal, e){
@@ -732,6 +741,7 @@ window.WebDJ.GUI = (function(){
 			nudgeBackwardBar: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: '<< 1 Bar',
 					tooltip: 'Click to jump 1 bar back.',
 					onClick: function(newVal, e){
@@ -742,6 +752,7 @@ window.WebDJ.GUI = (function(){
 			nudgeForwardBar: {
 				type: 'button',
 				options: {
+					classNames: 'button-yellow',
 					labelHTML: '1 Bar >>',
 					tooltip: 'Click to jump 1 bar forward.',
 					onClick: function(newVal, e){

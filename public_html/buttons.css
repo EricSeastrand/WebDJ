@@ -1,0 +1,114 @@
+.button-green {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#00C90D),color-stop(15%,#26972D),color-stop(50%,#008209),color-stop(96%,#39E444));
+	background: -webkit-linear-gradient(top, #00C90D 0%,#26972D 15%,#008209 50%,#39E444 96%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(57, 228, 68, 1);
+	text-shadow: 1px 1px 3px rgba(0, 130, 9, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #008209;
+	color: #39E444;
+	font-size: 28px;
+}
+.button-green:hover {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#008209),color-stop(58%,#008209),color-stop(96%,#39E444),color-stop(100%,#39E444));
+	background: -webkit-linear-gradient(top, #008209 1%,#008209 58%,#39E444 96%,#39E444 100%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(57, 228, 68, 1);
+	text-shadow: 1px 1px 3px rgba(0, 130, 9, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #008209;
+	color: #39E444;
+	font-size: 28px;
+}
+.button-green:active {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#67E46F),color-stop(28%,#39E444),color-stop(72%,#26972D),color-stop(97%,#008209));
+	background: -webkit-linear-gradient(top, #67E46F 0%,#39E444 28%,#26972D 72%,#008209 97%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(57, 228, 68, 1);
+	text-shadow: 1px 1px 3px rgba(0, 130, 9, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #008209;
+	color: #39E444;
+	font-size: 28px;
+}
+
+
+
+.button-red {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FB000D),color-stop(15%,#BC2F36),color-stop(50%,#A30008),color-stop(96%,#FD3F49));
+	background: -webkit-linear-gradient(top, #FB000D 0%,#BC2F36 15%,#A30008 50%,#FD3F49 96%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(253, 63, 73, 1);
+	text-shadow: 1px 1px 3px rgba(163, 0, 8, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A30008;
+	color: #FD3F49;
+	font-size: 28px;
+}
+.button-red:hover {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#A30008),color-stop(58%,#A30008),color-stop(96%,#FD3F49),color-stop(100%,#FD3F49));
+	background: -webkit-linear-gradient(top, #A30008 1%,#A30008 58%,#FD3F49 96%,#FD3F49 100%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(253, 63, 73, 1);
+	text-shadow: 1px 1px 3px rgba(163, 0, 8, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A30008;
+	color: #FD3F49;
+	font-size: 28px;
+}
+.button-red:active {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FD7279),color-stop(28%,#FD3F49),color-stop(72%,#BC2F36),color-stop(97%,#A30008));
+	background: -webkit-linear-gradient(top, #FD7279 0%,#FD3F49 28%,#BC2F36 72%,#A30008 97%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(253, 63, 73, 1);
+	text-shadow: 1px 1px 3px rgba(163, 0, 8, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A30008;
+	color: #FD3F49;
+	font-size: 28px;
+}
+
+
+
+.button-yellow {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFDD00),color-stop(15%,#BFAC30),color-stop(50%,#A68F00),color-stop(96%,#FFE540));
+	background: -webkit-linear-gradient(top, #FFDD00 0%,#BFAC30 15%,#A68F00 50%,#FFE540 96%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(255, 229, 64, 1);
+	text-shadow: 1px 1px 3px rgba(166, 143, 0, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A68F00;
+	color: #FFE540;
+	font-size: 28px;
+}
+.button-yellow:hover {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#A68F00),color-stop(58%,#A68F00),color-stop(96%,#FFE540),color-stop(100%,#FFE540));
+	background: -webkit-linear-gradient(top, #A68F00 1%,#A68F00 58%,#FFE540 96%,#FFE540 100%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(255, 229, 64, 1);
+	text-shadow: 1px 1px 3px rgba(166, 143, 0, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A68F00;
+	color: #FFE540;
+	font-size: 28px;
+}
+.button-yellow:active {
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFEC73),color-stop(28%,#FFE540),color-stop(72%,#BFAC30),color-stop(97%,#A68F00));
+	background: -webkit-linear-gradient(top, #FFEC73 0%,#FFE540 28%,#BFAC30 72%,#A68F00 97%);
+	line-height: 44px;
+	border-radius: 4px / 1px;
+	box-shadow: 3px 3px 16px -3px rgba(255, 229, 64, 1);
+	text-shadow: 1px 1px 3px rgba(166, 143, 0, 0.9);
+	padding: 0px 12px;
+	border: 1px solid #A68F00;
+	color: #FFE540;
+	font-size: 28px;
+}
