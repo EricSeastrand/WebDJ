@@ -297,6 +297,9 @@ window.WebDJ.GUI = (function(){
 					options.bindTo.value = this.value;
 				});
 
+
+
+			window.setTimeout(function(){ setValue(options.startPct || 0); }, 3000);
 			return rotaryContainer;
 		},
 		genericReadout: function(options){
@@ -480,6 +483,7 @@ window.WebDJ.GUI = (function(){
 					imgSrc	: 'img/knob_black.png',
 					imageRotationOffset: -45, // degrees
 					unit	: 'hz',
+					startPct: 0,
 					bindTo	: mixerBackend.channels[channel].components[1].frequency
 				}
 			},
@@ -490,6 +494,7 @@ window.WebDJ.GUI = (function(){
 					imgSrc	: 'img/knob_black.png',
 					imageRotationOffset: -45, // degrees
 					unit	: 'hz',
+					startPct: 100,
 					bindTo	: mixerBackend.channels[channel].components[0].frequency
 				}
 			},
@@ -630,6 +635,8 @@ window.WebDJ.GUI = (function(){
 					maxValue: "1200",
 					onChange: function(newVal){
 						deckBackend.setSpeed(1 + (newVal / 10000));
+						if(e.ctrlKey) deckBackend.trackBPM =  Math.floor( deckBackend.calculatedBPM );
+
 					},bindTo: {
 						event: 'playStart bpmSync',
 						object: deckBackend,

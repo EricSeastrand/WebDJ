@@ -34,6 +34,8 @@ window.audioUtilities.components.ericsFilter = function(context){
 
 window.audioUtilities.components.lowPass = function(context){
 	var self = context.createBiquadFilter();
+	self.frequency.value = self.frequency.maxValue;
+	self.startPct = 100;
 
 	self.setType = function(){
 		
@@ -51,7 +53,8 @@ window.audioUtilities.components.lowPass = function(context){
 window.audioUtilities.components.highPass = function(context){
 	var self = context.createBiquadFilter();
 	self.type = 1;
-	
+	self.frequency.value = self.frequency.minValue;
+	self.startPct = 100;
 	self.setType = function(){
 		
 	};

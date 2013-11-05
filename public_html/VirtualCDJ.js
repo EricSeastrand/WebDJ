@@ -301,9 +301,11 @@ window.audioUtilities.VirtualCDJ = function(context){
 		if(self.nowPlaying == url && self.trackBPM) return;
 		
 		var songInfo = window.WebDJ.SongInfo.getInfoFor(url);
-		self.trackStartOffset	= songInfo.offset || 0;
-		self.trackBPM			= songInfo.bpm || 0;
-		self.trackCuePoints		= songInfo.cuePoints || [];
+		if(songInfo){
+			self.trackStartOffset	= songInfo.offset || self.trackStartOffset;
+			self.trackBPM			= songInfo.bpm || 0;
+			self.trackCuePoints		= songInfo.cuePoints || [];
+		}
 		
 		//self.GUI.class.renderedControls.startOffset.data('input-element').attr({value: self.trackStartOffset * 1000}).trigger('change.noPropagation');
 		self.trigger('songInfoLoaded', songInfo);
