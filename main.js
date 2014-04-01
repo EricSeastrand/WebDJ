@@ -35,12 +35,7 @@ window.WebDJ.Main = (function(){
 		self.mixer.addChannel(self.deck1);
 		self.mixer.addChannel(self.deck2);
 		
-		self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Last Time (Knife Party Remix) - Labrinth.mp3', false);
-
-		//self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Duck Sauce - Barbra Streisand (Darth & Vader Remix).mp3', false);
-		self.deck2.loadTrackByURL(WebDJ.rootFilePath+'E - Less Go! (Porter Robinson Remix) - Spencer & Hill feat. Lil Jon.mp3', false);
-
-		
+				
 		
 		window.WebDJ.GUI.RenderMixer(self.mixer);
 		
@@ -90,6 +85,11 @@ window.WebDJ.Main = (function(){
 		WebDJ.GUI.Decks[0].renderedControls.playbackRate.on('mouseup', function(e){ if(!e.shiftKey) self.syncDeckBPM(self.deck2, self.deck1); });
 	
 		
+		self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Last Time (Knife Party Remix) - Labrinth.mp3', false);
+
+		//self.deck1.loadTrackByURL(WebDJ.rootFilePath+'E - Duck Sauce - Barbra Streisand (Darth & Vader Remix).mp3', false);
+		self.deck2.loadTrackByURL(WebDJ.rootFilePath+'E - Less Go! (Porter Robinson Remix) - Spencer & Hill feat. Lil Jon.mp3', false);
+
 
 	};
 

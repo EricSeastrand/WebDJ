@@ -19,26 +19,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#373737', end
 	margin: 10px 0px;
 }
 .generic-text-readout {
-	z-index: 20;
+	z-index: 100;
 	position: relative;
 }
-.metronome-flasher + .generic-text-readout {
-	position: absolute;
-	top: 5.4%;
-	right: 4.3%;
-	
-	margin: 0;
-}
-.metronome-bpm-readout, .metronome-flasher + .generic-text-readout {
-/* padding-left: 12px; */
-text-shadow: 0px -1px 1px hsl(0, 0%, 0%);
+
+.metronome-bpm-readout {
+padding-left: 12px;
+text-shadow: 0px -1px 1px hsl(0, 100%, 100%);
 border: 1px solid hsla(0, 100%, 100%, 0.15);
 border-radius: 3PX;
-padding: 0PX 9PX;
+padding: 1PX 12PX;
 margin-left: 24PX;
-box-shadow: inset 3px 3px 16px -3px hsla(0, 0%, 52%, 0.45);
-background: hsla(0, 0%, 0%, 0.33);
-color: white;
+box-shadow: inset 1px 1px 9px 0px hsla(0, 0%, 0%, 0.25);
+background: hsla(0, 100%, 100%, 0.25);
 }
 .metronome-flasher {
 	min-height: 24px;
@@ -54,16 +47,14 @@ color: white;
 	background: #dedef4; /* Old browsers */
 	
 	background: #fa9f30;
-	box-shadow: 66px 0px 24px -10px hsla(0, 100%, 100%, 0.37);
+	box-shadow: 6px 0px 24px 3px hsl(0, 100%, 100%);
 }
 
 .cuePoint {
 	border: 1px solid white;
-	background: hsla(218, 100%, 50%, 0.44) !important;
+	background: silver !important;
 	cursor: pointer;
 
-	height: 22px !important;
-	border-radius: 6PX;
 }
 .cuePoint:hover {
 	border: 1px solid black;
@@ -109,19 +100,18 @@ min-height: 160%;
 .metronome-flasher:before, 
 	.metronome-flasher:after {
 	border-radius: 6px;
-	background: hsla(0, 0%, 0%, 0.5);
+	background: hsla(0, 100%, 100%, 0.33);
 	position: absolute;
 	display: block;
 	width: 4%;
-	border: 1px ridge hsla(0, 100%, 100%, 0.33);
 	z-index: 4;
 	height: 60%;
-	bottom: 15%;
-	box-shadow: 0px 2px 6px -2px hsl(0, 0%, 0%);
+	top: 20%;
+	box-shadow: 0px -3px 9px 0px hsla(0, 100%, 100%, 0.33);
 	text-align: center;
 	color: white;
-	line-height: 115%;
-	font-size: 85%;
+	line-height: 100%;
+	font-size: 80%;
 	text-shadow: 1px 1px 0px black;
 }
 
@@ -132,6 +122,7 @@ min-height: 160%;
 }
 
 .metronome-flasher:before {
+	border-right: 1px solid hsla(0, 0%, 79%, 0.3);
 	left: 22%;
 	content: '2';
 	
@@ -154,117 +145,4 @@ box-shadow: inset 0 0 24px 0 hsla(0, 0%, 0%, 0.33);
 
 .metronome-flasher, .metronome-bar-progressbar {
 border-radius: 3px;
-
-}
-.esgrid-td-name {
-	text-align: left;
-}
-.deck-container.busy:after {
-	content: 'Loading...';	
-	display: block;
-	font-size: 300%;
-	width: 100%;
-	height: 100%;
-	top: 0; left: 0;
-	position: absolute;
-	background: url(loading.gif) center no-repeat hsla(0, 0%, 0%, 0.5);
-	z-index: 100;
-	text-align: center;
-	line-height: 250px;
-	text-shadow: 1px 1px 1px hsl(0, 0%, 0%);
-}
-.deck-container {
-	position: relative;}
-
-.deck-container .now-loading {
-	display: none;
-}
-
-.deck-container.busy .now-loading {
-	display: inline-block;
-}
-.song-browser {
-position: relative;
-}
-
-#Decks_Container {
-	min-height: 49%;
-}
-#Mixer_Container {
-	max-height: 16.2%;
-}
-.song-browser {
-	height: 35%;
-}
-.esgrid-wrapper {
-	overflow-x: hidden !important;
-}
-.progressBar-container {
-    border: 1px solid hsla(0, 0%, 0%, 0.33);
-    border-radius: 3px;
-    box-shadow: inset -1px 1px 6px -2px hsl(0, 0%, 0%);
-    background: hsla(0, 0%, 0%, 0.5);
-    height: 26px;
-}
-.progressBar-bar {
-	height: 100%;
-	z-index: 10;
-	border-radius: 3px;
-	border: 1px ridge hsla(0, 0%, 0%, 0.33);
-
-	background: hsla(204, 37%, 31%, 0.66);
-	box-shadow: 66px 0px 24px -10px hsla(0, 100%, 100%, 0.37);
-}
-
-.time-readout {
-z-index: 20;
-display: inline-block;
-padding: 2px 12px;
-background: hsla(0, 100%, 100%, 0.25);
-margin: 2px auto 2px 2px;
-
-text-align: center;
-position: absolute;
-right: 22px;
-border-radius: 3px;
-top: 1px;
-}
-.now-playing {
-font-size: 120%;
-font-weight: bold;
-}
-.progressBar-container .generic-text-readout.undefined {
-	display: none;
-}
-
-.cuePoints-container {
-position: relative;
-width: 100%;
-z-index: 20;
-bottom: -2px !important;
-margin: 0 5px;
-bottom: -34px;
-z-index: 100;
-}
-
-.cuePointLabel {
-height: 100%;
-vertical-align: baseline;
-line-height: 100%;
-text-shadow: 1px 1px 0px hsl(0, 0%, 0%);
-padding-left: 9px !important;
-height: 22px;
-font-weight: lighter;
-}
-
-.mixer-channel-strip { text-align: center; padding: 6px 0;}
-
-
-.song-browser {
-position: relative;
-	
-height: 36%;
-}
-.esgrid-wrapper {
-	overflow-x: hidden;
 }

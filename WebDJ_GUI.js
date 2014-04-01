@@ -13,14 +13,17 @@ window.WebDJ.GUI = (function(){
 	function updateValueReadout(){
 		var $this = $(this);
 		var data = $this.data();
-		data.readoutContainer.text( $this.attr('value')+ (data.options.unit || '') );
+		var text = $this.attr('value');
+		try{ text = data.options.formatter(text);} catch(e){};
+		try{  text += data.options.unit || '';} catch(e){};
+		data.readoutContainer.text( text );
 		
 	}
 	
 	self.viewTemplates = {
-				
 		bpmFlasher: function(options){
 			var bpm = 128;
+			var options = options || {};
 			var interval = false;
 			var oldWidth;
 			var container = $('<div>')
@@ -60,6 +63,11 @@ window.WebDJ.GUI = (function(){
 				container.css('background', 'white');
 			}
 			
+			function zero(){
+				beatReadout.text(0);
+				bpmReadout.text([options.trackBPM || '??',' BPM'].join('') );
+				progressBar.css('width', '1%');
+			}
 			
 			var startTime = new Date().getTime();
 			function startFlashing(bpm, callbackToGetElapsedTime){
@@ -67,7 +75,7 @@ window.WebDJ.GUI = (function(){
 				container.data('isPlaying', true)
 				bpm = bpm;
 				var msecPerBeat		= 60000 / bpm;
-				bpmReadout.text('BPM: '+bpm);
+				bpmReadout.text([bpm,' BPM'].join(''));
 				if(typeof callbackToGetElapsedTime == 'function')
 					var getElapsedWith = callbackToGetElapsedTime;
 				
@@ -99,7 +107,7 @@ window.WebDJ.GUI = (function(){
 	
 					oldWidth = newWidth;
 	
-				}, 5);
+				}, 50);
 			}
 			
 			function stopFlashing(){
@@ -107,8 +115,11 @@ window.WebDJ.GUI = (function(){
 				window.clearInterval(interval);
 			}
 			
-			container.data({startFlashing: startFlashing, stopFlashing: stopFlashing});
+			container.data({zero: zero, startFlashing: startFlashing, stopFlashing: stopFlashing});
 			
+			if(options.on && options.on.call)options.on('bufferLoaded', zero);
+				
+
 			return container;	
 		}
 	};
@@ -315,8 +326,11 @@ window.WebDJ.GUI = (function(){
 			
 			var renderContainer = function(options){
 				var itemContainer	= $('<div>').appendTo(container);
-				var label			= $('<span>').css({'margin-right': '6px'}).appendTo(itemContainer).text(options.label || '');
-				var valueReadout	= $('<span>').appendTo(itemContainer).text(options.defaultValue || '');
+				itemContainer.addClass(options.classNames);
+				itemContainer.attr('title', (options.tooltip || ''));
+
+				var label			= $('<span>').appendTo(itemContainer).text(options.label || '');
+				var valueReadout	= $('<span>').appendTo(itemContainer);
 				
 				if(options.bindTo){
 					if(typeof options.bindTo.callback == 'function')
@@ -329,6 +343,8 @@ window.WebDJ.GUI = (function(){
 							valueReadout.text(options.bindTo.readFrom);
 						});
 				}
+
+				valueReadout.text(options.defaultValue || '');
 			}
 			if(options.items && options.items.length){
 				for(var i=0; i<options.items.length; i++){
@@ -345,18 +361,15 @@ window.WebDJ.GUI = (function(){
 			var container = $('<div>')
 				.addClass('progressBar-container')
 				.css({
-					position: 'relative',
-					height: '20px'
-					
+					position: 'relative'					
 				})
 			;
 			
 			var progressBar = $('<div>')
+				.addClass('progressBar-bar')
 				.css({
-					'background': 'red',
-					'position': 'absolute',
-					'height': 'inherit'
-				})
+					
+					'position': 'absolute',				})
 				.appendTo(container)
 			;
 			
@@ -385,8 +398,10 @@ window.WebDJ.GUI = (function(){
 			}
 			var readoutObj = {};
 			var readouts = self.controlTemplates.genericReadout({items: options.readouts}, readoutObj);
-			container.append(readouts, readoutObj);
 			
+			if(readouts.length){
+				container.append(readouts, readoutObj);
+			}
 			return container;
 		},
 		cuePoints: function(options, my){
@@ -396,8 +411,7 @@ window.WebDJ.GUI = (function(){
 			var container = $('<div>')
 				.addClass('cuePoints-container')
 				.css({
-					position: 'relative',
-					height: '20px'
+					position: 'relative'
 				})
 			;
 			
@@ -476,7 +490,7 @@ window.WebDJ.GUI = (function(){
 	};
 
 	function RenderChannelStrip(mixerBackend, channel){
-		var container = $('<div>').addClass('mixer-channel-strip').css({display: 'inline-block', width: '30%', padding: '12px', border: '1px solid blue'});
+		var container = $('<div>').addClass('mixer-channel-strip').css({display: 'inline-block', width: '30%', border: '1px solid blue'});
 		self.Mixer.renderedControls[channel] = {_container: container};
 		var controls = {
 			hpf_filter_cutoff: {
@@ -559,8 +573,7 @@ window.WebDJ.GUI = (function(){
 			.appendTo(self.decksContainer)
 		;
 		deckBackend.GUI = {'class': Deck, 'dom': deckContainer};
-
-			// file drag hover
+					// file drag hover
 		function FileDragHover(e) {
 			e.stopPropagation();
 			e.preventDefault();
@@ -591,39 +604,69 @@ window.WebDJ.GUI = (function(){
 
 
 		Deck.controls = {
-			barsBeatsReadout: {
+			barBeatPositionReadout: {
+				type: 'genericReadout',
+ 				options: {
+					items: [
+						{
+							classNames: 'bar-beat-position',
+							defaultValue: 'Bar 0',
+							bindTo: {
+								event: 'beatChange bufferLoaded',
+								object: deckBackend,
+								callback: function(newPos, textContainer){
+									var bars = newPos.bars || '1';  
+									textContainer.text('Bar '+bars);
+								}
+							}
+						}
+					]
+				}
+			},
+			deckStatusReadout: {
 				type: 'genericReadout',
 				options: {
 					items: [
 						{
-							label: 'Bars/Beats',
-							bindTo: {
-								event: 'beatChange',
-								object: deckBackend,
-								callback: function(newPos, textContainer){
-									textContainer.text(newPos.bars + ' ' + newPos.beats)
-								}
-							}
-						},{
-							label: 'Now Playing:',
+							defaultValue: 'Now Playing:',
+							classNames: 'now-playing',
 							bindTo: {
 								event: 'bufferLoaded',
 								object: deckBackend,
 								callback: function(newPos, textContainer){
 									var loadedFile = /[^/]*$/.exec(this.object.getNowPlayingFilename())
-									textContainer.text(loadedFile[0])
+									var songInfo = WebDJ.SongInfo.getInfoFor( loadedFile[0] );
+									
+									textContainer.text(songInfo.songName || loadedFile[0])
 								}
 							}
 						},{
 							label: '',
+							classNames: 'now-loading',
 							bindTo: {
 								event: 'startedLoading bufferLoaded',
 								object: deckBackend,
 								callback: function(newPos, textContainer){
-									if(this.object.isLoadingTrackURL)
-										textContainer.text('Loading: ' + this.object.isLoadingTrackURL);
-									else
+									if(this.object.isLoadingTrackURL) {
+										var songInfo = WebDJ.SongInfo.getInfoFor( this.object.isLoadingTrackURL.toString() );
+									
+										textContainer.text('Loading: ' + songInfo.songName || this.object.isLoadingTrackURL);
+									} else
 										textContainer.text('');
+								}
+							}
+						},{
+							defaultValue: 'Time',
+							classNames: 'time-readout',
+							bindTo: {
+								event: 'playheadChange',
+								object: deckBackend,
+								callback: function(newPos, textContainer){
+									textContainer.text([
+										WebDJ.UTIL.msecToMSmS(this.object.calculatedPlayheadPosition),
+											' / ',
+										WebDJ.UTIL.secondsToHMS_Formatted( (this.object.source.buffer.duration - this.object.trackStartOffset) * (1/this.object.playbackRate) )
+									].join(''));
 								}
 							}
 						}
@@ -636,6 +679,8 @@ window.WebDJ.GUI = (function(){
 					label: 'Speed Shift',
 					minValue: "-1200",
 					maxValue: "1200",
+					unit: '%',
+					formatter: function(v){ return parseInt(v) / 100; },
 					onChange: function(newVal){
 						deckBackend.setSpeed(1 + (newVal / 10000));
 						if(e.ctrlKey) deckBackend.trackBPM =  Math.floor( deckBackend.calculatedBPM );
@@ -656,6 +701,7 @@ window.WebDJ.GUI = (function(){
 					label: 'Offset',
 					minValue: "0",
 					maxValue: "6000",
+					unit: 'ms',
 					value	: deckBackend.trackStartOffset,
 					onChange: function(newVal, e){
 						deckBackend.setOffsetRealTime(newVal/1000, e.shiftKey);
@@ -696,7 +742,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25C3;&#x25C3;',
+					labelHTML: '&#x25C2;&#x25C2;',
 					tooltip: 'Click to jump backwards 25 milliseconds in the track. Double click to go back 100 ms.',
 					onClick: function(newVal, e){
 						deckBackend.nudge(-.025);
@@ -710,7 +756,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25B9;&#x25B9;',
+					labelHTML: '&#x25B8;&#x25B8;',
 					tooltip: 'Click to jump forward 25 milliseconds in the track. Double click to go forward 100 ms.',
 					onClick: function(newVal, e){
 						deckBackend.nudge(.025);
@@ -724,7 +770,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25C5;&#x25C5;',
+					labelHTML: '&#x25C3;&#x25C3;',
 					tooltip: 'Click to jump 1 beat back.',
 					onClick: function(newVal, e){
 						deckBackend.nudgeBeats(-1);
@@ -738,7 +784,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25BB;&#x25BB;',
+					labelHTML: '&#x25B9;&#x25B9;',
 					tooltip: 'Click to jump 1 beat forward.',
 					onClick: function(newVal, e){
 						deckBackend.nudgeBeats(1);
@@ -752,7 +798,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25C2;&#x25C2;',
+					labelHTML: '&#x25C5;&#x25C5;',
 					tooltip: 'Click to jump 1 bar back.',
 					onClick: function(newVal, e){
 						deckBackend.nudgeBeats(-4);
@@ -763,7 +809,7 @@ window.WebDJ.GUI = (function(){
 				type: 'button',
 				options: {
 					classNames: 'button-yellow',
-					labelHTML: '&#x25B8;&#x25B8;',
+					labelHTML: '&#x25BB;&#x25BB;',
 					tooltip: 'Click to jump 1 bar forward.',
 					onClick: function(newVal, e){
 						deckBackend.nudgeBeats(4);
@@ -789,20 +835,7 @@ window.WebDJ.GUI = (function(){
 						}
 					},
 					readouts: [
-						{
-							label: 'Time',
-							bindTo: {
-								event: 'playheadChange',
-								object: deckBackend,
-								callback: function(newPos, textContainer){
-									textContainer.text([
-										WebDJ.UTIL.msecToMSmS(this.object.calculatedPlayheadPosition),
-											'/',
-										WebDJ.UTIL.secondsToHMS_Formatted( (this.object.source.buffer.duration - this.object.trackStartOffset) * (1/this.object.playbackRate) )
-									].join(''));
-								}
-							}
-						}
+						
 					]
 				}
 			}
@@ -823,8 +856,12 @@ window.WebDJ.GUI = (function(){
 			deckContainer.append( renderedControl );
 		}
 		
-		
-		
+		deckBackend.on('bufferLoaded', function(){ deckContainer.removeClass('busy'); });
+
+
+		deckBackend.on('startedLoading', function(){ deckContainer.addClass('busy'); });
+
+
 		self.Decks.push(Deck);
 	};
 		

@@ -15,7 +15,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 			beats: 0,
 			beatPct: 0
 		},
-		flasher		: WebDJ.GUI.viewTemplates.bpmFlasher(),
+		
 		trackStartOffset: 0,
 		trackBPM	: 128,
 		trackTimeSignature: [4,4],
@@ -24,6 +24,8 @@ window.audioUtilities.VirtualCDJ = function(context){
 	};
 	
 	GiveThisObjectEventHandlingMethods(self);
+	
+	self.flasher = WebDJ.GUI.viewTemplates.bpmFlasher(self);
 	
 	function loadIntoBufferSource(url){
 		var newBufferSource = context.createBufferSource();

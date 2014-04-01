@@ -62,9 +62,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f43722', end
 .rotary-control-value-readout {
 float: right;
 clear: both;
+font-size: 110%;
+font-weight: bold;
+padding: 14PX 0PX;
+text-shadow: 1px 1px 0 black;
+color: hsla(0, 0%, 73%, 0.9);
+text-align: right;
 }
 .rotary-knob-ui-control{
-	background: -moz-linear-gradient(45deg,  rgba(147,155,148,0.77) 0%, rgba(51,53,52,0.8) 20%, rgba(51,53,52,0.91) 100%);
+	display: block;
 	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(147,155,148,0.77)), color-stop(20%,rgba(51,53,52,0.8)), color-stop(100%,rgba(51,53,52,0.91)));
 	background: -webkit-linear-gradient(45deg,  rgba(147,155,148,0.77) 0%,rgba(51,53,52,0.8) 20%,rgba(51,53,52,0.91) 100%);
 	background: -o-linear-gradient(45deg,  rgba(147,155,148,0.77) 0%,rgba(51,53,52,0.8) 20%,rgba(51,53,52,0.91) 100%);
@@ -73,13 +79,15 @@ clear: both;
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c4939b94', endColorstr='#e8333534',GradientType=1 );
 	border-radius: 100%;
 	border: 1px solid black;
-	height: 32px; width: 32px;
-	margin: 3px 0;
-	display: inline-block;
+	height: 30px; 
+	width: 30px;
+	box-sizing: initial;
+	float: left;
+	margin: 8px;
 }
 
 .rotary-control-container {
-	padding: 2px 2px;
+	padding: 2px 12px 2px 12px;
 }
 
 div.rotary-knob-ui-control:after {
