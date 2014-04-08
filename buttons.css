@@ -163,21 +163,3 @@ background: linear-gradient(to bottom,  #32f620 0%,#5cf93d 52%,#34f61e 100%);
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#32f620', endColorstr='#34f61e',GradientType=0 );
 
 }
-.rotary-control-container {
-	padding: 2px 12px 2px 12px;
-}
-
-div.rotary-knob-ui-control:after {
-background: rgba(255,255,255, 0.85);
-content: '';
-display: block;
--webkit-transform: rotate(0deg);
-position: absolute;
-top: 14px;
-left: 0px;
-border: 1px ridge rgba(0,0,0,.25);
-color: hsl(0, 100%, 100%);
-height: 2px;
-width: 14px;
-border-radius: 5px 6px 6px 5px;
-} 

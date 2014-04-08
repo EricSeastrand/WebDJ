@@ -24,8 +24,9 @@ window.audioUtilities.VirtualCDJ = function(context){
 	};
 	
 	GiveThisObjectEventHandlingMethods(self);
-	
-	self.flasher = WebDJ.GUI.viewTemplates.bpmFlasher(self);
+	self.on('playStart', intervalStart);
+	self.on('playStop', intervalStop);
+	//self.flasher = WebDJ.GUI.viewTemplates.bpmFlasher(self);
 	
 	function loadIntoBufferSource(url){
 		var newBufferSource = context.createBufferSource();
@@ -67,6 +68,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 			request.responseType = 'arraybuffer';
 			request.addEventListener('load', function(){
 				console.log('Starting to decode '+url);
+				self.trigger('startedDecoding');
 				context.decodeAudioData(request.response, function(buffer){
 					WebDJ.cache[url] = buffer;
 					afterDecode(url);
@@ -111,56 +113,38 @@ window.audioUtilities.VirtualCDJ = function(context){
 				
 		
 	};
+
+	self.on('playheadChange', afterPlayheadPositionChange);
 	
-	self.beatsMeasureCalculator = (function(){
-		var interval = false
-		  , elapsedMsec
-		  , msecFromNextBeat
-		  , measureProgress
-		  , msecPerBeat
-		  , msecPerMeasure
-		  , computedBeatNumber
-		  , computedMeasureNumber
-		;
-		var me = {
-			updateOnInterval: function(){
-				msecPerMeasure	= 60000*self.trackTimeSignature[0] / self.getComputedBPM();
-				msecPerBeat		= msecPerMeasure/4;
-				interval		= window.setInterval(calculate, 5);
-			}
-		};
+	function afterPlayheadPositionChange(){
+		var elapsedMsec     = self.calculatedPlayheadPosition;
+		var computedBPM     = self.getComputedBPM();
+		var msecPerBeat		= 60000 / computedBPM;
+		var msecPerMeasure	= msecPerBeat * self.trackTimeSignature[0];
+
+		var msecFromNextBeat = (elapsedMsec % msecPerBeat);
+		var measureProgress  = ( ( elapsedMsec / msecPerMeasure ) % 1 ) * 100;
 		
-		var calculate = function(){
-			if(!self.isPlaying){ window.clearInterval(interval); return; }
-			
-			elapsedMsec			= self.updatePlayheadPosition();
-			
-			msecFromNextBeat	= (elapsedMsec % msecPerBeat);
-			measureProgress = ( ( elapsedMsec / msecPerMeasure ) % 1 ) * 100;
-			
-			computedMeasureNumber = Math.floor(elapsedMsec / msecPerMeasure);
-			
-			if(measureProgress < 25){
-				computedBeatNumber = 1;
-			}else if(measureProgress < 50){
-				computedBeatNumber = 2;
-			}else if(measureProgress < 75){
-				computedBeatNumber = 3;
-			}else{
-				computedBeatNumber = 4;
-			}
-			
-			computedMeasureNumber++; // In music, we would start with measure 1, not measure 0.
-			
-			if(computedBeatNumber != self.barBeatPosition.beats || computedMeasureNumber != self.barBeatPosition.bars){
-				self.barBeatPosition.beats	= computedBeatNumber;
-				self.barBeatPosition.bars	= computedMeasureNumber;
-				self.trigger('beatChange', self.barBeatPosition);
-			}
+		var computedMeasureNumber = Math.floor(elapsedMsec / msecPerMeasure);
+		var computedBeatNumber;
+		if(measureProgress < 25){
+			computedBeatNumber = 1;
+		}else if(measureProgress < 50){
+			computedBeatNumber = 2;
+		}else if(measureProgress < 75){
+			computedBeatNumber = 3;
+		}else{
+			computedBeatNumber = 4;
 		}
 		
-		return me;
-	}());
+		computedMeasureNumber++; // In music, we would start with measure 1, not measure 0.
+		
+		if(computedBeatNumber != self.barBeatPosition.beats || computedMeasureNumber != self.barBeatPosition.bars){
+			self.barBeatPosition.beats	= computedBeatNumber;
+			self.barBeatPosition.bars	= computedMeasureNumber;
+			self.trigger('beatChange', self.barBeatPosition);
+		}
+	}
 	
 	self.getNowPlayingFilename = function(){
 		return self.nowPlaying || self.lastFileLoaded;
@@ -178,14 +162,13 @@ window.audioUtilities.VirtualCDJ = function(context){
 		self.source.playbackRate.value = self.playbackRate || 1;
 		self.playheadStartedAt = self.playheadPosition;
 		
-		var startPlayingFromHere = self.playheadPosition+self.trackStartOffset - .003; // 3ms latency compensation
+		var startPlayingFromHere = self.playheadPosition+self.trackStartOffset;
 		var howLongToPlay = self.source.buffer.duration-startPlayingFromHere;
 		
 		console.log('starting play in '+Math.floor( (scheduleTime - self.source.context.currentTime) * 1000)+'ms from point: ',startPlayingFromHere, 'until',howLongToPlay, 'duration:', (howLongToPlay - startPlayingFromHere), 'clip duration', self.source.buffer.duration);
 		self.source.noteGrainOn(scheduleTime, startPlayingFromHere, howLongToPlay);//( - self.playheadPosition)-0.057
-		self.beatsMeasureCalculator.updateOnInterval();
 		
-		self.flasher.data('startFlashing')(self.trackBPM * self.source.playbackRate.value, self.updatePlayheadPosition);
+		//self.flasher.data('startFlashing')(self.trackBPM * self.source.playbackRate.value, self.updatePlayheadPosition);
 		
 		self.playingStartedAt = self.source.context.currentTime;
 		self.nowPlaying = url;
@@ -193,6 +176,14 @@ window.audioUtilities.VirtualCDJ = function(context){
 		
 		self.trigger('playStart', self.playheadPosition, self.source.buffer.duration-self.trackStartOffset);
 	};
+
+	var interval;
+	function intervalStart(){
+		interval = window.setInterval(self.updatePlayheadPosition, 10)
+	}
+	function intervalStop(){
+		window.clearInterval(interval);
+	}
 	
 	self.schedulePlayback = function(millisecondsFromNow){
 		if(self.isPlaying)
@@ -216,14 +207,25 @@ window.audioUtilities.VirtualCDJ = function(context){
 	
 	
 	self.stop = function(resetPlayhead){
-		self.isPlaying = false;
+		if(!self.nowPlaying || self.nowPlaying !== self.lastFileLoaded)
+			resetPlayhead = true;
+		
 		self.lastPlayed = self.nowPlaying;
 		self.nowPlaying = false;
-		self.source.noteOff(0);
-		if(self.lastPlayed != self.lastFileLoaded || resetPlayhead === true)	self.playheadPosition = 0;
+		self.isPlaying = false;
+		
+		try{
+			self.source.noteOff(0);
+		} catch(e){ resetPlayhead=true; console.log(e); }// todo: fix this hack!
+
+		if(resetPlayhead)
+			self.playheadPosition = 0;
+		
 		self.trigger('playheadChange', self.playheadPosition, self.source.buffer.duration-self.trackStartOffset);
-		self.flasher.data('stopFlashing')();
+		//self.flasher.data('stopFlashing')();
+		
 		self.source.disconnect(0);
+
 		reloadCurrentTrack();
 		self.trigger('playStop');
 	};
@@ -314,6 +316,9 @@ window.audioUtilities.VirtualCDJ = function(context){
 	};
 	
 	self.updatePlayheadPosition = function(){
+		if(self.source.playbackState === self.source.FINISHED_STATE)
+			self.stop();
+		
 		var elapsed = self.source.context.currentTime - self.playingStartedAt;
 		self.playheadPosition = self.playheadStartedAt + elapsed;
 		self.calculatedPlayheadPosition = (self.playheadPosition - self.playheadPositionAtLastSpeedChange) * 1000 + ( self.playheadPositionAtLastSpeedChange*1000 * (1/ self.source.playbackRate.value) );
@@ -350,7 +355,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 	
 	self.setSpeed = function(newRate){
 		self.playbackRate = self.source.playbackRate.value = newRate;
-		self.flasher.data('startFlashing')(self.trackBPM * self.source.playbackRate.value, self.updatePlayheadPosition);
+		//self.flasher.data('startFlashing')(self.trackBPM * self.source.playbackRate.value, self.updatePlayheadPosition);
 		self.playheadPositionAtLastSpeedChange = self.playheadPosition;
 		self.getComputedBPM();
 	};

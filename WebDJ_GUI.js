@@ -125,6 +125,50 @@ window.WebDJ.GUI = (function(){
 	};
 	
 	self.controlTemplates = {
+		beatCounter: function(options){
+			var options = options || {};
+
+			var progressBar = $('<div>')
+				.addClass('metronome-bar-progressbar')
+			;
+						
+			var bpmReadout = $('<span>')
+				.text('BPM')
+				.addClass('metronome-bpm-readout')
+			;
+			
+			var beatReadout = $('<span>')
+				.html('&#x2669')
+				.addClass('metronome-beat-readout')
+			;
+
+			var container = $('<div>')
+				.addClass('metronome-flasher')
+				.append(progressBar, bpmReadout, beatReadout);
+			;
+			
+			function zero(){
+				bpmReadout.text(options.deckBackend.trackBPM);
+				updateBeat(options.deckBackend.barBeatPosition);
+			}
+
+			var currentBeatClassName = 'beat-1';
+			function updateBeat(newBeats){
+				beatReadout.text(newBeats.beats);
+				
+				container.removeClass(currentBeatClassName);
+				
+				currentBeatClassName = ['beat-'+newBeats.beats].join();
+				
+				container.addClass(currentBeatClassName);
+			}
+			
+			options.deckBackend.on('beatChange', updateBeat);
+			options.deckBackend.on('bufferLoaded', zero);	
+
+			return container;
+		},
+
 		button: function(options){
 			options = options || {};
 			if(!options.bindTo) options.bindTo = {};
@@ -616,6 +660,12 @@ window.WebDJ.GUI = (function(){
 
 
 		Deck.controls = {
+			bpmFlasher: {
+				type: 'beatCounter',
+ 				options: {
+					deckBackend: deckBackend
+				}
+			},
 			barBeatPositionReadout: {
 				type: 'genericReadout',
  				options: {
@@ -693,7 +743,7 @@ window.WebDJ.GUI = (function(){
 					maxValue: "1200",
 					unit: '%',
 					formatter: function(v){ return parseInt(v) / 100; },
-					onChange: function(newVal){
+					onChange: function(newVal, e){
 						deckBackend.setSpeed(1 + (newVal / 10000));
 						if(e.ctrlKey) deckBackend.trackBPM =  Math.floor( deckBackend.calculatedBPM );
 
@@ -711,8 +761,8 @@ window.WebDJ.GUI = (function(){
 				type: 'slider',
 				options: {
 					label: 'Offset',
-					minValue: "0",
-					maxValue: "6000",
+					minValue: "-200",
+					maxValue: "200",
 					unit: 'ms',
 					value	: deckBackend.trackStartOffset,
 					onChange: function(newVal, e){

@@ -5,7 +5,7 @@ window.WebDJ.SongInfo = (function(){
 		{
 			fileName: 'E - Last Time (Knife Party Remix) - Labrinth.mp3',
 			bpm		: 128,
-			offset	: 0.215,
+			offset	: 0,
 			cuePoints: [
 				{
 					title: '32 intro',
