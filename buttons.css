@@ -1,6 +1,6 @@
 button {
 	line-height: 44px;
-	border-radius: 3px;
+	border-radius: 2px;
 	box-shadow: 3px 3px 16px -3px #332d3b;
 	text-shadow: 1px 1px 0px white;
 	padding: 2px 16px;
@@ -85,7 +85,84 @@ text-align: right;
 	float: left;
 	margin: 8px;
 }
+.button-yellow {
+	background: #b2f422;
+	background: -moz-linear-gradient(top,  #b2f422 0%, #cdf83e 52%, #b4f420 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#b2f422), color-stop(52%,#cdf83e), color-stop(100%,#b4f420));
+	background: -webkit-linear-gradient(top,  #b2f422 0%,#cdf83e 52%,#b4f420 100%);
+	background: -o-linear-gradient(top,  #b2f422 0%,#cdf83e 52%,#b4f420 100%);
+	background: -ms-linear-gradient(top,  #b2f422 0%,#cdf83e 52%,#b4f420 100%);
+	background: linear-gradient(to bottom,  #b2f422 0%,#cdf83e 52%,#b4f420 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b2f422', endColorstr='#b4f420',GradientType=0 );
 
+}
+.button-orange {
+	background: #f4b922;
+background: -moz-linear-gradient(top,  #f4b922 0%, #f8b43e 52%, #f4b420 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f4b922), color-stop(52%,#f8b43e), color-stop(100%,#f4b420));
+background: -webkit-linear-gradient(top,  #f4b922 0%,#f8b43e 52%,#f4b420 100%);
+background: -o-linear-gradient(top,  #f4b922 0%,#f8b43e 52%,#f4b420 100%);
+background: -ms-linear-gradient(top,  #f4b922 0%,#f8b43e 52%,#f4b420 100%);
+background: linear-gradient(to bottom,  #f4b922 0%,#f8b43e 52%,#f4b420 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f4b922', endColorstr='#f4b420',GradientType=0 );
+
+}
+.button-pink {
+	background: #f42299;
+background: -moz-linear-gradient(top,  #f42299 0%, #f83eb7 52%, #f4209c 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f42299), color-stop(52%,#f83eb7), color-stop(100%,#f4209c));
+background: -webkit-linear-gradient(top,  #f42299 0%,#f83eb7 52%,#f4209c 100%);
+background: -o-linear-gradient(top,  #f42299 0%,#f83eb7 52%,#f4209c 100%);
+background: -ms-linear-gradient(top,  #f42299 0%,#f83eb7 52%,#f4209c 100%);
+background: linear-gradient(to bottom,  #f42299 0%,#f83eb7 52%,#f4209c 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f42299', endColorstr='#f4209c',GradientType=0 );
+
+}
+.button-purple {
+	background: #cb2beb;
+background: -moz-linear-gradient(top,  #cb2beb 0%, #c546f0 52%, #c72aea 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cb2beb), color-stop(52%,#c546f0), color-stop(100%,#c72aea));
+background: -webkit-linear-gradient(top,  #cb2beb 0%,#c546f0 52%,#c72aea 100%);
+background: -o-linear-gradient(top,  #cb2beb 0%,#c546f0 52%,#c72aea 100%);
+background: -ms-linear-gradient(top,  #cb2beb 0%,#c546f0 52%,#c72aea 100%);
+background: linear-gradient(to bottom,  #cb2beb 0%,#c546f0 52%,#c72aea 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cb2beb', endColorstr='#c72aea',GradientType=0 );
+
+}
+
+.button-blue {
+	background: #2b3feb;
+background: -moz-linear-gradient(top,  #2b3feb 0%, #4665f0 52%, #2a40ea 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b3feb), color-stop(52%,#4665f0), color-stop(100%,#2a40ea));
+background: -webkit-linear-gradient(top,  #2b3feb 0%,#4665f0 52%,#2a40ea 100%);
+background: -o-linear-gradient(top,  #2b3feb 0%,#4665f0 52%,#2a40ea 100%);
+background: -ms-linear-gradient(top,  #2b3feb 0%,#4665f0 52%,#2a40ea 100%);
+background: linear-gradient(to bottom,  #2b3feb 0%,#4665f0 52%,#2a40ea 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b3feb', endColorstr='#2a40ea',GradientType=0 );
+
+}
+.button-sky {
+	background: #2b9eeb;
+background: -moz-linear-gradient(top,  #2b9eeb 0%, #46baf0 52%, #2aa0ea 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b9eeb), color-stop(52%,#46baf0), color-stop(100%,#2aa0ea));
+background: -webkit-linear-gradient(top,  #2b9eeb 0%,#46baf0 52%,#2aa0ea 100%);
+background: -o-linear-gradient(top,  #2b9eeb 0%,#46baf0 52%,#2aa0ea 100%);
+background: -ms-linear-gradient(top,  #2b9eeb 0%,#46baf0 52%,#2aa0ea 100%);
+background: linear-gradient(to bottom,  #2b9eeb 0%,#46baf0 52%,#2aa0ea 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b9eeb', endColorstr='#2aa0ea',GradientType=0 );
+
+}
+.button-neongreen {
+background: #32f620;
+background: -moz-linear-gradient(top,  #32f620 0%, #5cf93d 52%, #34f61e 100%);
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#32f620), color-stop(52%,#5cf93d), color-stop(100%,#34f61e));
+background: -webkit-linear-gradient(top,  #32f620 0%,#5cf93d 52%,#34f61e 100%);
+background: -o-linear-gradient(top,  #32f620 0%,#5cf93d 52%,#34f61e 100%);
+background: -ms-linear-gradient(top,  #32f620 0%,#5cf93d 52%,#34f61e 100%);
+background: linear-gradient(to bottom,  #32f620 0%,#5cf93d 52%,#34f61e 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#32f620', endColorstr='#34f61e',GradientType=0 );
+
+}
 .rotary-control-container {
 	padding: 2px 12px 2px 12px;
 }
@@ -103,4 +180,4 @@ color: hsl(0, 100%, 100%);
 height: 2px;
 width: 14px;
 border-radius: 5px 6px 6px 5px;
-}
+} 

@@ -268,3 +268,36 @@ height: 36%;
 .esgrid-wrapper {
 	overflow-x: hidden;
 }
+
+.deck-container.is-playing .deck-stop-button {
+	display: initial;
+}
+
+.deck-container .deck-stop-button {
+	display: none;
+}
+
+
+.deck-container.is-playing .deck-play-button {
+	display: none;
+}
+
+.deck-container .deck-play-button {
+	display: initial;
+}
+
+input[type='range'] {
+    -webkit-appearance: none !important;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px #333;
+    background-color: #999;
+    
+    }
+input[type='range']::-webkit-slider-thumb {
+    
+    -webkit-border-radius: 10px;
+    background-color: #AAA;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#EEE), to(#AAA));
+    border: 1px solid #999;
+    
+}

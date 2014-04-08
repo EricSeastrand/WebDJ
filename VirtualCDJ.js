@@ -225,7 +225,7 @@ window.audioUtilities.VirtualCDJ = function(context){
 		self.flasher.data('stopFlashing')();
 		self.source.disconnect(0);
 		reloadCurrentTrack();
-		
+		self.trigger('playStop');
 	};
 	
 	self.barsBeatsToSeconds = function(bars, beats){

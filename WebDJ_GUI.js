@@ -492,6 +492,16 @@ window.WebDJ.GUI = (function(){
 	function RenderChannelStrip(mixerBackend, channel){
 		var container = $('<div>').addClass('mixer-channel-strip').css({display: 'inline-block', width: '30%', border: '1px solid blue'});
 		self.Mixer.renderedControls[channel] = {_container: container};
+		function hertzToKHz(Hz) {
+			Hz  = parseFloat(Hz);
+
+			if(Hz < 8000) return Hz.toString();
+
+			
+			var text = Math.floor(Hz / 1000);
+
+			return [text, 'K'].join('');
+		}
 		var controls = {
 			hpf_filter_cutoff: {
 				type: 'rotary',
@@ -499,7 +509,8 @@ window.WebDJ.GUI = (function(){
 					label	: 'High Pass Cutoff',
 					//imgSrc	: 'img/knob_black.png',
 					//imageRotationOffset: -45, // degrees
-					unit	: 'hz',
+					unit	: 'Hz',
+					formatter: hertzToKHz,
 					startPct: 0,
 					bindTo	: mixerBackend.channels[channel].components[1].frequency
 				}
@@ -510,7 +521,8 @@ window.WebDJ.GUI = (function(){
 					label	: 'Low Pass Cutoff',
 					//imgSrc	: 'img/knob_black.png',
 					//imageRotationOffset: -45, // degrees
-					unit	: 'hz',
+					unit	: 'Hz',
+					formatter: hertzToKHz,
 					startPct: 100,
 					bindTo	: mixerBackend.channels[channel].components[0].frequency
 				}
@@ -663,7 +675,7 @@ window.WebDJ.GUI = (function(){
 								object: deckBackend,
 								callback: function(newPos, textContainer){
 									textContainer.text([
-										WebDJ.UTIL.msecToMSmS(this.object.calculatedPlayheadPosition),
+										WebDJ.UTIL.secondsToHMS_Formatted(this.object.calculatedPlayheadPosition/1000),
 											' / ',
 										WebDJ.UTIL.secondsToHMS_Formatted( (this.object.source.buffer.duration - this.object.trackStartOffset) * (1/this.object.playbackRate) )
 									].join(''));
@@ -717,6 +729,7 @@ window.WebDJ.GUI = (function(){
 			},
 			play: {
 				type: 'button',
+				classNames: 'deck-play-button',
 				options: {
 					labelHTML: '&#x25B8;',
 					classNames: 'button-green',
@@ -728,7 +741,7 @@ window.WebDJ.GUI = (function(){
 			stop: {
 				type: 'button',
 				options: {
-					classNames: 'button-red',
+					classNames: 'deck-stop-button button-red',
 					labelHTML: '&#x25A0;',
 					onClick: function(newVal, e){
 						deckBackend.stop(e.shiftKey /*Makes shift+click return the playhead to the start*/);
@@ -741,7 +754,7 @@ window.WebDJ.GUI = (function(){
 			nudgeBackward: {
 				type: 'button',
 				options: {
-					classNames: 'button-yellow',
+					classNames: 'button-sky',
 					labelHTML: '&#x25C2;&#x25C2;',
 					tooltip: 'Click to jump backwards 25 milliseconds in the track. Double click to go back 100 ms.',
 					onClick: function(newVal, e){
@@ -755,7 +768,7 @@ window.WebDJ.GUI = (function(){
 			nudgeForward: {
 				type: 'button',
 				options: {
-					classNames: 'button-yellow',
+					classNames: 'button-sky',
 					labelHTML: '&#x25B8;&#x25B8;',
 					tooltip: 'Click to jump forward 25 milliseconds in the track. Double click to go forward 100 ms.',
 					onClick: function(newVal, e){
@@ -769,7 +782,7 @@ window.WebDJ.GUI = (function(){
 			nudgeBackwardBeats: {
 				type: 'button',
 				options: {
-					classNames: 'button-yellow',
+					classNames: 'button-orange',
 					labelHTML: '&#x25C3;&#x25C3;',
 					tooltip: 'Click to jump 1 beat back.',
 					onClick: function(newVal, e){
@@ -783,7 +796,7 @@ window.WebDJ.GUI = (function(){
 			nudgeForwardBeats: {
 				type: 'button',
 				options: {
-					classNames: 'button-yellow',
+					classNames: 'button-orange',
 					labelHTML: '&#x25B9;&#x25B9;',
 					tooltip: 'Click to jump 1 beat forward.',
 					onClick: function(newVal, e){
@@ -856,6 +869,9 @@ window.WebDJ.GUI = (function(){
 			deckContainer.append( renderedControl );
 		}
 		
+		deckBackend.on('playStart', function(){ deckContainer.addClass('is-playing'); });
+		deckBackend.on('playStop',  function(){ deckContainer.removeClass('is-playing'); });
+
 		deckBackend.on('bufferLoaded', function(){ deckContainer.removeClass('busy'); });
 
 
@@ -892,6 +908,7 @@ window.WebDJ.GUI = (function(){
 					label: 'Crossfader',
 					minValue: "0",
 					maxValue: "1000",
+					formatter: function(val){ return (val - 500)/10 + '%';  },
 					onChange: function(newVal){
 						newVal = newVal / 10;
 						

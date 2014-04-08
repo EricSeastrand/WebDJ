@@ -5,7 +5,7 @@ window.WebDJ.SongInfo = (function(){
 		{
 			fileName: 'E - Last Time (Knife Party Remix) - Labrinth.mp3',
 			bpm		: 128,
-			offset	: 0.035,
+			offset	: 0.215,
 			cuePoints: [
 				{
 					title: '32 intro',
@@ -140,7 +140,7 @@ window.WebDJ.SongInfo = (function(){
 		},{
 			fileName: 'E - Community Funk - Deadmau5 Remix - Burufunk, Carbon Community.mp3',
 			bpm		: 128,
-			offset	: 0.009
+			offset	: 0.141
 		},{//2.666666666686069
 			fileName: 'E - Less Go! (Porter Robinson Remix) - Spencer & Hill feat. Lil Jon.mp3',
 			bpm		: 128,
